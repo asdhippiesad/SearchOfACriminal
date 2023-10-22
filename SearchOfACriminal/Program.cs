@@ -10,7 +10,7 @@ namespace SearchOfACriminal
         {
             CriminalBase criminal = new CriminalBase();
 
-            criminal.SetDescription();
+            criminal.FindCriminal();
 
             Console.ReadKey();
         }
@@ -28,7 +28,7 @@ namespace SearchOfACriminal
                 new Criminal("Алёна Зыкова", "русская", 86, 189, true)
             };
 
-        public void SetDescription()
+        public void FindCriminal()
         {
             Console.WriteLine("Введите вес: ");
             string weight = Console.ReadLine();
@@ -39,9 +39,7 @@ namespace SearchOfACriminal
             if (int.TryParse(weight, out int inputWeight) && int.TryParse(height, out int inputHeight))
             {
                 var filledCriminal = from Criminal criminals in _criminals
-                                     where criminals.Weight == inputWeight
-                                     where criminals.Height == inputHeight
-                                     where criminals.IsImprisoned == false
+                                     where criminals.Weight == inputWeight && criminals.Height == inputHeight && criminals.IsImprisoned == false
                                      select criminals;
 
                 if (filledCriminal.Any())
@@ -57,37 +55,30 @@ namespace SearchOfACriminal
 
         public void ShowInfo(List<Criminal> criminal)
         {
-            if (criminal.Count == 0)
+            foreach (Criminal criminals in criminal)
             {
-
-            }
-            else
-            {
-                foreach (Criminal criminals in criminal)
-                {
-                    Console.WriteLine($"имя -- {criminals.Name}.\n" +
-                                      $"вес -- {criminals.Weight}.\n" +
-                                      $"рост -- {criminals.Height}.\n");
-                }
+                Console.WriteLine($"имя -- {criminals.Name}.\n" +
+                                  $"вес -- {criminals.Weight}.\n" +
+                                  $"рост -- {criminals.Height}.\n");
             }
         }
     }
 
     class Criminal
     {
+        public Criminal(string name, string nationality, int weight, int height, bool imprisoned)
+        {
+            Name = name;
+            Nationality = nationality;
+            Weight = weight;
+            Height = height;
+            IsImprisoned = imprisoned;
+        }
+
         public string Name { get; private set; }
         public string Nationality { get; private set; }
         public int Weight { get; private set; }
         public int Height { get; private set; }
         public bool IsImprisoned { get; private set; }
-
-        public Criminal(string name, string mationality, int weight, int height, bool imprisoned)
-        {
-            Name = name;
-            Nationality = mationality;
-            Weight = weight;
-            Height = height;
-            IsImprisoned = imprisoned;
-        }
     }
 }
